@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS `management_outfits` (
   `name` varchar(50) NOT NULL DEFAULT 'Cool Outfit',
   `gender` varchar(50) NOT NULL DEFAULT 'male',
   `model` varchar(50) DEFAULT NULL,
-  `props` varchar(1000) DEFAULT NULL,
-  `components` varchar(1500) DEFAULT NULL,
+  `props` TEXT DEFAULT NULL,
+  `components` TEXT DEFAULT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=26 DEFAULT CHARSET=utf8mb4;

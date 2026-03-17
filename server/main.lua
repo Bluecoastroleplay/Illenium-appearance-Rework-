@@ -248,14 +248,24 @@ RegisterNetEvent('illenium-appearance:server:saveManagementOutfit', function(out
     if outfitData.Type ~= 'Job' and outfitData.Type ~= 'Gang' then return end
     local job = outfitData.Type == 'Gang' and Framework.GetGang(src) or Framework.GetJob(src)
     if job.name ~= outfitData.JobName then return end
+    -- Only boss/manager-rank players may create management outfits
+    if not job.isboss then return end
     Database.ManagementOutfits.Add(outfitData)
     lib.notify(src, { title = _L('outfits.save.success.title'), description = string.format(_L('outfits.save.success.description'), tostring(outfitData.Name)), type = 'success', position = Config.NotifyOptions.position })
 end)
 
-RegisterNetEvent('illenium-appearance:server:deleteManagementOutfit', function(id)
+RegisterNetEvent('illenium-appearance:server:deleteManagementOutfit', function(id, mType)
     local src = source
     if not isValidSource(src) then return end
     if type(id) ~= 'number' then return end
+    if mType ~= 'Job' and mType ~= 'Gang' then return end
+    -- Look up the outfit to verify it exists and get its owning job/gang
+    local outfit = Database.ManagementOutfits.GetByID(id)
+    if not outfit then return end
+    -- Verify the player belongs to the correct job/gang and has boss rank
+    local job = mType == 'Gang' and Framework.GetGang(src) or Framework.GetJob(src)
+    if job.name ~= outfit.job_name then return end
+    if not job.isboss then return end
     Database.ManagementOutfits.DeleteByID(id)
 end)
 

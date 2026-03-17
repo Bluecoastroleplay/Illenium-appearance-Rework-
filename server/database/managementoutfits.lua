@@ -12,6 +12,11 @@ function Database.ManagementOutfits.GetAllByJob(type, jobName, gender)
     return MySQL.query.await(query, queryArgs)
 end
 
+function Database.ManagementOutfits.GetByID(id)
+    local rows = MySQL.query.await("SELECT * FROM management_outfits WHERE id = ? LIMIT 1", {id})
+    return rows and rows[1] or nil
+end
+
 function Database.ManagementOutfits.Add(outfitData)
     return MySQL.insert.await("INSERT INTO management_outfits (job_name, type, minrank, name, gender, model, props, components) VALUES (?, ?, ?, ?, ?, ?, ?, ?)", {
         outfitData.JobName,
